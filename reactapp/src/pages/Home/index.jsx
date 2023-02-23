@@ -1,17 +1,64 @@
 import  './styles.css';
 import { Card } from '../../components/Card';
+import React, { useState, useEffect } from 'react';
+
 
 export function Home() {
+  const [studentName, setStudentName] = useState('')
+  const [students, setStudents] = useState([])
+  const [user, setUser] = useState([{name: '', avatar: ''}])
+
+  function handleAddStudent(){
+    const newStudent = {
+      name : studentName,
+      time : new Date().toLocaleTimeString("pt-br", {
+        hour: '2-digit',
+        minute: "2-digit",
+        second: "2-digit",
+      })
+    }
+
+    setStudents(prevState => [...prevState, newStudent])
+  }
+
+  useEffect(() => {
+    async function fetchdata(){  
+      const response = await fetch('https://api.github.com/users/gsilveirag')
+      const data = await response.json()
+      console.log("DADOS =>", data);
+
+        setUser({
+            name: data.name,
+            avatar: data.avatar_url
+          })
+
+      }
+      fetchdata()
+  },[])
+
 
   return (
     <div className='container'>
-      <h1> Lista de Presença:</h1>
-      <input type="text" placeholder="Digite o nome..."/>
-      <button type="button">Adicionar</button>
+      <header>
+        <h1> Lista de Presença:</h1>
+        <div>
+          <strong>{user.name}</strong>
+          <img src={user.avatar} alt="Foto de Perfil" />
+        </div>
+      </header>
+
+      <input type="text" placeholder="Digite o nome..." onChange={e => setStudentName(e.target.value) } />
+      <button type="button" onClick={handleAddStudent}>Adicionar</button>
     
-      <Card name='Alessando' time='10:55:25' />
-      <Card name='Diego' time='12:55:25' /> 
-      <Card name='Anna' time='10:59:29'/>
+      {
+        students.map(student => 
+        <Card
+          key={student.time} // Usar o time pq e um objeto unico, tempo diferente
+          name={student.name} 
+          time={student.time} 
+        />
+        )
+      }
     </div>
   )
 }

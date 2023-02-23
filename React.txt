@@ -1,0 +1,6 @@
+Hooks
+São funções que permitem conectar os recursos de estados e ciclos de vida do React a partir de componentes funcionais. Normalmente os Hooks iniciam com a palavra use por convenção. Exemplos de hooks: useState, useEffect.
+
+useState: e um hook que armazena um determinado conteudo/estado e conecta com a interface para iniciar um novo ciclo.
+
+useEffect: e um hook utilizado assim que a nossa interface e renderizada. ele executado automaticamente.
